@@ -1,8 +1,8 @@
 import express, { Express, Request, Response } from "express";
 import dotenv from 'dotenv';
-import { orderRouter } from "../controllers/order.controller";
+import { orderRouter } from "../src/controllers/order.controller";
 import cors from 'cors';
-import getDeliveryOrders from "../controllers/delivery-order";
+import getDeliveryOrders from "../src/controllers/delivery-order";
 
 dotenv.config();
 const app: Express = express();
