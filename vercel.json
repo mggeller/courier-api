@@ -11,12 +11,5 @@
       "src": "/",
       "dest": "dist/api/index.js"
     }
-  ],
-  "redirects": [
-    {
-      "source": "/orders",
-      "destination": "dist/api/index.js",
-      "permanent": false
-    }
   ]
 }
