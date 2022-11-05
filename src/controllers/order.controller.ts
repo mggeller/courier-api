@@ -7,6 +7,21 @@ import {
   putOrder,
 } from "../services/order.service";
 import cors from "cors";
+import { ObjectId } from "mongodb";
+import { Customer } from "../model/customer";
+import { WoltFee } from "../model/wolt";
+import getDeliveryFee from "./delivery-fee";
+
+type GetOrderResponse = {
+  id?: ObjectId;
+  orderToken: string;
+  accountNumber?: string;
+  price?: number;
+  height?: number;
+  width?: number;
+  length?: number;
+  weight?: number;
+};
 
 export const orderRouter = express.Router();
 
@@ -30,8 +45,8 @@ orderRouter.get("/", async (req: Request, res: Response) => {
   }
 });
 
-orderRouter.get("/:token", async (req: Request, res: Response) => {
-  const token = req.params.token;
+orderRouter.get("/:orderToken", async (req: Request, res: Response) => {
+  const token = req.params.orderToken;
 
   try {
     const order = await getOrder(token);
@@ -62,26 +77,45 @@ orderRouter.post("/", async (req: Request, res: Response) => {
   }
 });
 
-orderRouter.put("/:token", async (req: Request, res: Response) => {
-  const token = req.params.token;
+orderRouter.put("/:orderToken", async (req: Request, res: Response) => {
+  const token = req.params.orderToken;
 
   try {
     const buyerInfo = req.body;
-    let updateOrder = await getOrder(token);
+
     let result;
+    let updateOrder = await getOrder(token);
+
     if (!updateOrder) {
       console.error("Could not find order with such token");
       return;
     }
 
-    if (updateOrder != undefined || updateOrder != null) {
+
+    const woltFeeBody: WoltFee = {
+      pickup: {
+        location: {
+          formatted_address: updateOrder.seller?.address!,
+        },
+      },
+      dropoff: {
+        location: {
+          formatted_address: buyerInfo.address,
+        },
+      },
+    };
+
+    const woltFeeResponse = await getDeliveryFee(woltFeeBody);
+
+    if (woltFeeResponse != 'ERR_BAD_REQUEST') {
       updateOrder.buyer = buyerInfo;
       result = await putOrder(updateOrder, token);
+      res.status(201).send(woltFeeResponse);
+      return;
     }
 
-    result
-      ? res.status(200).send(`Successfully updated order with token: ${token}`)
-      : res.status(304).send(`Order with token: ${token} not updated`);
+    console.log("WOLT RESP: ", woltFeeResponse);
+    res.status(500).send(woltFeeResponse);
   } catch (error) {
     console.error(error);
     res.status(400);

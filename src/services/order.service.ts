@@ -19,11 +19,11 @@ export const getAll = async () => {
   }
 };
 
-export const getOrder = async (token: string) => {
+export const getOrder = async (orderToken: string) => {
   let order;
   try {
     await connectToDatabase();
-    const query = { token: token };
+    const query = { orderToken: orderToken };
     order = await collections.orders?.findOne(query);
 
     return order;
@@ -54,11 +54,11 @@ export const createOrder = async (order: Order) => {
   }
 };
 
-export const putOrder = async (order: Order, token: string) => {
+export const putOrder = async (order: Order, orderToken: string) => {
   let result;
   try {
     await connectToDatabase();
-    const query = { token: token };
+    const query = { orderToken: orderToken };
 
     result = await collections.orders?.updateOne(query, { $set: order });
 

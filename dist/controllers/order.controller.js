@@ -40,6 +40,7 @@ const express_1 = __importDefault(require("express"));
 const bodyParser = __importStar(require("body-parser"));
 const order_service_1 = require("../services/order.service");
 const cors_1 = __importDefault(require("cors"));
+const delivery_fee_1 = __importDefault(require("./delivery-fee"));
 exports.orderRouter = express_1.default.Router();
 exports.orderRouter.use(bodyParser.json());
 exports.orderRouter.use((0, cors_1.default)());
@@ -58,8 +59,8 @@ exports.orderRouter.get("/", (req, res) => __awaiter(void 0, void 0, void 0, fun
         res.status(500);
     }
 }));
-exports.orderRouter.get("/:token", (req, res) => __awaiter(void 0, void 0, void 0, function* () {
-    const token = req.params.token;
+exports.orderRouter.get("/:orderToken", (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    const token = req.params.orderToken;
     try {
         const order = yield (0, order_service_1.getOrder)(token);
         if (!order) {
@@ -86,23 +87,38 @@ exports.orderRouter.post("/", (req, res) => __awaiter(void 0, void 0, void 0, fu
         res.status(400);
     }
 }));
-exports.orderRouter.put("/:token", (req, res) => __awaiter(void 0, void 0, void 0, function* () {
-    const token = req.params.token;
+exports.orderRouter.put("/:orderToken", (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    var _a;
+    const token = req.params.orderToken;
     try {
         const buyerInfo = req.body;
-        let updateOrder = yield (0, order_service_1.getOrder)(token);
         let result;
+        let updateOrder = yield (0, order_service_1.getOrder)(token);
         if (!updateOrder) {
             console.error("Could not find order with such token");
             return;
         }
-        if (updateOrder != undefined || updateOrder != null) {
+        const woltFeeBody = {
+            pickup: {
+                location: {
+                    formatted_address: (_a = updateOrder.seller) === null || _a === void 0 ? void 0 : _a.address,
+                },
+            },
+            dropoff: {
+                location: {
+                    formatted_address: buyerInfo.address,
+                },
+            },
+        };
+        const woltFeeResponse = yield (0, delivery_fee_1.default)(woltFeeBody);
+        if (woltFeeResponse != 'ERR_BAD_REQUEST') {
             updateOrder.buyer = buyerInfo;
             result = yield (0, order_service_1.putOrder)(updateOrder, token);
+            res.status(201).send(woltFeeResponse);
+            return;
         }
-        result
-            ? res.status(200).send(`Successfully updated order with token: ${token}`)
-            : res.status(304).send(`Order with token: ${token} not updated`);
+        console.log("WOLT RESP: ", woltFeeResponse);
+        res.status(500).send(woltFeeResponse);
     }
     catch (error) {
         console.error(error);

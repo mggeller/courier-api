@@ -26,12 +26,12 @@ const getAll = () => __awaiter(void 0, void 0, void 0, function* () {
     }
 });
 exports.getAll = getAll;
-const getOrder = (token) => __awaiter(void 0, void 0, void 0, function* () {
+const getOrder = (orderToken) => __awaiter(void 0, void 0, void 0, function* () {
     var _b;
     let order;
     try {
         yield (0, database_service_1.connectToDatabase)();
-        const query = { token: token };
+        const query = { orderToken: orderToken };
         order = yield ((_b = database_service_1.collections.orders) === null || _b === void 0 ? void 0 : _b.findOne(query));
         return order;
     }
@@ -62,12 +62,12 @@ const createOrder = (order) => __awaiter(void 0, void 0, void 0, function* () {
     }
 });
 exports.createOrder = createOrder;
-const putOrder = (order, token) => __awaiter(void 0, void 0, void 0, function* () {
+const putOrder = (order, orderToken) => __awaiter(void 0, void 0, void 0, function* () {
     var _d;
     let result;
     try {
         yield (0, database_service_1.connectToDatabase)();
-        const query = { token: token };
+        const query = { orderToken: orderToken };
         result = yield ((_d = database_service_1.collections.orders) === null || _d === void 0 ? void 0 : _d.updateOne(query, { $set: order }));
         return result === null || result === void 0 ? void 0 : result.upsertedId;
     }

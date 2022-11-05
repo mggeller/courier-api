@@ -13,7 +13,6 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 const axios_1 = __importDefault(require("axios"));
-const express_1 = __importDefault(require("express"));
 const testData = {
     pickup: {
         location: {
@@ -26,16 +25,20 @@ const testData = {
         },
     },
 };
-const app = (0, express_1.default)();
-const getDeliveryFee = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
-    const response = yield axios_1.default.post(`https://daas-public-api.development.dev.woltapi.com/merchants/${process.env.MERCHANT_ID}/delivery-fee`, testData, {
-        headers: {
-            "Content-Type": "application/json;charset=UTF-8",
-            Authorization: `Bearer ${process.env.API_KEY}`,
-        },
-    });
-    const data = response.data;
-    res.json(data);
-    return data;
+const getDeliveryFee = (woltFeePayload) => __awaiter(void 0, void 0, void 0, function* () {
+    try {
+        const response = yield axios_1.default.post(`https://daas-public-api.development.dev.woltapi.com/merchants/${process.env.MERCHANT_ID}/delivery-fee`, woltFeePayload, {
+            headers: {
+                "Content-Type": "application/json;charset=UTF-8",
+                Authorization: `Bearer ${process.env.API_KEY}`,
+            },
+        });
+        const data = response.data;
+        console.log('DATA: ', data);
+        return data;
+    }
+    catch (error) {
+        return 'ERR_BAD_REQUEST';
+    }
 });
 exports.default = getDeliveryFee;
