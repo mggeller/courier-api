@@ -20,7 +20,7 @@
       "dest": "dist/api/index.js"
     },
     {
-      "src": "/*",
+      "src": "/orders/(.*)",
       "dest": "dist/api/index.js"
     }
   ]
