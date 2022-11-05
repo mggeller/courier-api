@@ -19,7 +19,7 @@ app.get('/delivery-orders', async (req: Request, res: Response) => {
   res.json(result);
 });
 
-app.use('/orders', orderRouter);
+app.use('/api/orders', orderRouter);
 
 app.listen(PORT, () => {
   console.log(`⚡️[server]: Server is running at https://localhost:${PORT}`);

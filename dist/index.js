@@ -28,7 +28,7 @@ app.get('/delivery-orders', (req, res) => __awaiter(void 0, void 0, void 0, func
     const result = yield (0, delivery_order_1.default)();
     res.json(result);
 }));
-app.use('/orders', order_controller_1.orderRouter);
+app.use('/api/orders', order_controller_1.orderRouter);
 app.listen(PORT, () => {
     console.log(`⚡️[server]: Server is running at https://localhost:${PORT}`);
 });
