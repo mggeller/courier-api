@@ -67,7 +67,18 @@ exports.orderRouter.get("/:orderToken", (req, res) => __awaiter(void 0, void 0, 
             console.error("Could not find order with such token");
             return;
         }
-        res.status(200).send(order);
+        const { id, orderToken, accountNumber, price, height, width, length, weight } = order;
+        const getOrderResponse = {
+            id: id,
+            orderToken: orderToken,
+            accountNumber: accountNumber,
+            price: price,
+            height: height,
+            width: width,
+            length: length,
+            weight: weight
+        };
+        res.status(200).send(getOrderResponse);
     }
     catch (error) {
         console.error(error);

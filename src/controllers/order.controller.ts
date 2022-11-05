@@ -8,7 +8,6 @@ import {
 } from "../services/order.service";
 import cors from "cors";
 import { ObjectId } from "mongodb";
-import { Customer } from "../model/customer";
 import { WoltFee } from "../model/wolt";
 import getDeliveryFee from "./delivery-fee";
 
@@ -56,7 +55,19 @@ orderRouter.get("/:orderToken", async (req: Request, res: Response) => {
       return;
     }
 
-    res.status(200).send(order);
+    const { id, orderToken, accountNumber, price, height, width, length, weight } = order;
+    const getOrderResponse: GetOrderResponse = {
+      id: id,
+      orderToken: orderToken,
+      accountNumber: accountNumber,
+      price: price,
+      height: height,
+      width: width,
+      length: length,
+      weight: weight
+    };
+
+    res.status(200).send(getOrderResponse);
   } catch (error) {
     console.error(error);
     res.status(400);
