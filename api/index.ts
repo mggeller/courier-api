@@ -9,6 +9,8 @@ const app: Express = express();
 const PORT = process.env.PORT;
 app.use(cors());
 
+app.use('/api/orders', orderRouter);
+
 app.get('/', (req: Request, res: Response) => {
   res.send('Express + TypeScript Server');
 });
@@ -18,8 +20,6 @@ app.get('/delivery-orders', async (req: Request, res: Response) => {
 
   res.json(result);
 });
-
-app.use('/api/orders', orderRouter);
 
 app.listen(PORT, () => {
   console.log(`⚡️[server]: Server is running at https://localhost:${PORT}`);
