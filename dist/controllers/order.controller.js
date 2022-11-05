@@ -49,10 +49,8 @@ exports.orderRouter.get("/", (req, res) => __awaiter(void 0, void 0, void 0, fun
     try {
         const orders = yield (0, order_service_1.getAll)();
         if (!orders) {
-            console.log("Did not find any extra steps");
             res.status(500).send("Could not find any orders");
         }
-        console.log("Orders: ", orders);
         res.status(200).send(orders);
     }
     catch (error) {
@@ -129,7 +127,6 @@ exports.orderRouter.put("/:orderToken", (req, res) => __awaiter(void 0, void 0, 
             res.status(201).send(woltFeeResponse);
             return;
         }
-        console.log("WOLT RESP: ", woltFeeResponse);
         res.status(500).send(woltFeeResponse);
     }
     catch (error) {
@@ -194,7 +191,6 @@ exports.orderRouter.post("/:orderToken", (req, res) => __awaiter(void 0, void 0,
             res.status(201).send(woltOrdersResponse);
             return;
         }
-        console.log('WOLT ORDERS RESP: ', woltOrdersResponse);
         res.status(500).send(woltOrdersResponse);
     }
     catch (error) {

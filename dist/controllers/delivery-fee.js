@@ -13,18 +13,6 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 const axios_1 = __importDefault(require("axios"));
-const testData = {
-    pickup: {
-        location: {
-            formatted_address: "Arkadiankatu 3-6",
-        },
-    },
-    dropoff: {
-        location: {
-            formatted_address: "Otakaari 24, 02150 Espoo",
-        },
-    },
-};
 const getDeliveryFee = (woltFeePayload) => __awaiter(void 0, void 0, void 0, function* () {
     try {
         const response = yield axios_1.default.post(`https://daas-public-api.development.dev.woltapi.com/merchants/${process.env.MERCHANT_ID}/delivery-fee`, woltFeePayload, {
@@ -34,7 +22,6 @@ const getDeliveryFee = (woltFeePayload) => __awaiter(void 0, void 0, void 0, fun
             },
         });
         const data = response.data;
-        console.log('DATA: ', data);
         return data;
     }
     catch (error) {

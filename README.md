@@ -65,18 +65,25 @@ Exampe:
 }
 ```
 
-### GET
+### **GET**
 
-#### /orders
+#### **/orders**
 Returns list of all orderst that are currenlty in the database.
 
-### POST
+#### **/orders/:orderToken**
 
-#### /orders
+Returns order by orderToken
+
+### **POST**
+
+#### **/orders**
 Creates initial order with only seller's information in there and package info.  
-Required body: Order
+Required body: **Order**
 
-### PUT
+#### **/order/:orderToken**
+Submits Wolt Delivery order through Wolt API and in Response gets Wolt API response on successful request or 'ERR_BAR_REQUEST' in case of an error.
 
-#### /orders/:token
+### **PUT**
+
+#### **/orders/:token**
 Finds order with given token and adds buyer to the already existing Order.

@@ -47,9 +47,7 @@ const createOrder = (order) => __awaiter(void 0, void 0, void 0, function* () {
     try {
         yield (0, database_service_1.connectToDatabase)();
         const token = (0, uuid_1.v4)();
-        console.log("TOKEN ON CREATE: ", token);
         order.orderToken = token;
-        console.log("ORDER TO CREATE: ", order);
         result = yield ((_c = database_service_1.collections.orders) === null || _c === void 0 ? void 0 : _c.insertOne(order));
         const response = {
             token: token,

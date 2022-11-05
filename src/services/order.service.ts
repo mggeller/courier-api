@@ -38,9 +38,7 @@ export const createOrder = async (order: Order) => {
   try {
     await connectToDatabase();
     const token = uuidv4();
-    console.log("TOKEN ON CREATE: ", token);
     order.orderToken = token;
-    console.log("ORDER TO CREATE: ", order);
     result = await collections.orders?.insertOne(order);
 
     const response: PostResponse = {

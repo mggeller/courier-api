@@ -33,11 +33,9 @@ orderRouter.get("/", async (req: Request, res: Response) => {
     const orders = await getAll();
 
     if (!orders) {
-      console.log("Did not find any extra steps");
       res.status(500).send("Could not find any orders");
     }
 
-    console.log("Orders: ", orders);
     res.status(200).send(orders);
   } catch (error) {
     console.error(error);
@@ -134,7 +132,6 @@ orderRouter.put("/:orderToken", async (req: Request, res: Response) => {
       return;
     }
 
-    console.log("WOLT RESP: ", woltFeeResponse);
     res.status(500).send(woltFeeResponse);
   } catch (error) {
     console.error(error);
@@ -204,7 +201,6 @@ orderRouter.post("/:orderToken", async (req: Request, res: Response) => {
       return;
     }
 
-    console.log('WOLT ORDERS RESP: ', woltOrdersResponse);
     res.status(500).send(woltOrdersResponse);
   } catch (error) {
     console.error(error);
