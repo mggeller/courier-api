@@ -2,8 +2,14 @@
     "version": 2,
     "builds": [
       {
-        "src": "package.json",
-        "use": "@now/static-build"
+        "src": "src/index.ts",
+        "use": "@now/node"
       }
-    ]
+    ],
+    "routes": [
+        {
+          "src": "src/(.*)",
+          "dest": "dist/index.js"
+        }
+      ]
   }
