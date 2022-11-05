@@ -1,7 +1,6 @@
 import { Customer } from "./customer";
 import { ObjectId } from "mongodb";
 
-
 interface Order {
     id?: ObjectId;
     orderToken: string;
