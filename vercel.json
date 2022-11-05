@@ -2,26 +2,26 @@
   "version": 2,
   "builds": [
     {
-      "src": "dist/api/index.js",
+      "src": "dist/index.js",
       "use": "@vercel/node"
     }
   ],
   "routes": [
     {
       "src": "/",
-      "dest": "dist/api/index.js"
+      "dest": "dist/index.js"
     },
     {
       "src": "/delivery-orders",
-      "dest": "dist/api/index.js"
+      "dest": "dist/index.js"
     },
     {
       "src": "/orders",
-      "dest": "dist/api/index.js"
+      "dest": "dist/index.js"
     },
     {
       "src": "/orders/(.*)",
-      "dest": "dist/api/index.js"
+      "dest": "dist/index.js"
     }
   ]
 }

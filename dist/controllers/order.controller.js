@@ -58,6 +58,21 @@ exports.orderRouter.get("/", (req, res) => __awaiter(void 0, void 0, void 0, fun
         res.status(500);
     }
 }));
+exports.orderRouter.get("/:token", (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    const token = req.params.token;
+    try {
+        const order = yield (0, order_service_1.getOrder)(token);
+        if (!order) {
+            console.error("Could not find order with such token");
+            return;
+        }
+        return order;
+    }
+    catch (error) {
+        console.error(error);
+        res.status(400);
+    }
+}));
 exports.orderRouter.post("/", (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     try {
         const newOrder = req.body;
@@ -80,7 +95,7 @@ exports.orderRouter.put("/:token", (req, res) => __awaiter(void 0, void 0, void 
         let updateOrder = yield (0, order_service_1.getOrder)(token);
         let result;
         if (!updateOrder) {
-            console.error('Could not find order with such token');
+            console.error("Could not find order with such token");
             return;
         }
         if (updateOrder != undefined || updateOrder != null) {

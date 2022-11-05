@@ -1,7 +1,12 @@
 import express, { Request, Response } from "express";
 import * as bodyParser from "body-parser";
-import { createOrder, getAll, getOrder, putOrder } from "../services/order.service";
-import cors from 'cors';
+import {
+  createOrder,
+  getAll,
+  getOrder,
+  putOrder,
+} from "../services/order.service";
+import cors from "cors";
 
 export const orderRouter = express.Router();
 
@@ -13,8 +18,8 @@ orderRouter.get("/", async (req: Request, res: Response) => {
     const orders = await getAll();
 
     if (!orders) {
-        console.log("Did not find any extra steps");
-        res.status(500).send("Could not find any orders");
+      console.log("Did not find any extra steps");
+      res.status(500).send("Could not find any orders");
     }
 
     console.log("Orders: ", orders);
@@ -22,6 +27,24 @@ orderRouter.get("/", async (req: Request, res: Response) => {
   } catch (error) {
     console.error(error);
     res.status(500);
+  }
+});
+
+orderRouter.get("/:token", async (req: Request, res: Response) => {
+  const token = req.params.token;
+
+  try {
+    const order = await getOrder(token);
+
+    if (!order) {
+      console.error("Could not find order with such token");
+      return;
+    }
+
+    return order;
+  } catch (error) {
+    console.error(error);
+    res.status(400);
   }
 });
 
@@ -48,14 +71,14 @@ orderRouter.put("/:token", async (req: Request, res: Response) => {
     const buyerInfo = req.body;
     let updateOrder = await getOrder(token);
     let result;
-    if(!updateOrder) {
-        console.error('Could not find order with such token');
-        return;
+    if (!updateOrder) {
+      console.error("Could not find order with such token");
+      return;
     }
 
     if (updateOrder != undefined || updateOrder != null) {
-        updateOrder.buyer = buyerInfo;
-        result = await putOrder(updateOrder, token);
+      updateOrder.buyer = buyerInfo;
+      result = await putOrder(updateOrder, token);
     }
 
     result
