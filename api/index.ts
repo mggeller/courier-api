@@ -9,7 +9,7 @@ const app: Express = express();
 const PORT = process.env.PORT;
 app.use(cors());
 
-app.use('/', orderRouter);
+app.use('/orders', orderRouter);
 
 /* app.get('/', (req: Request, res: Response) => {
   res.send('Express + TypeScript Server');

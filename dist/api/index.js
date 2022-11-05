@@ -21,7 +21,7 @@ dotenv_1.default.config();
 const app = (0, express_1.default)();
 const PORT = process.env.PORT;
 app.use((0, cors_1.default)());
-app.use('/', order_controller_1.orderRouter);
+app.use('/orders', order_controller_1.orderRouter);
 /* app.get('/', (req: Request, res: Response) => {
   res.send('Express + TypeScript Server');
 }); */
