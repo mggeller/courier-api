@@ -8,9 +8,10 @@ import {
 } from "../services/order.service";
 import cors from "cors";
 import { ObjectId } from "mongodb";
-import { WoltDeliveryOrder, WoltFee } from "../model/wolt";
 import getDeliveryFee from "./delivery-fee";
 import getDeliveryOrders from "./delivery-order";
+import { createWoltFeePayload } from "../utils/wolt-fee";
+import { createWoltDeliveryPayload } from "../utils/wolt-delivery";
 
 type GetOrderResponse = {
   id?: ObjectId;
@@ -64,6 +65,7 @@ orderRouter.get("/:orderToken", async (req: Request, res: Response) => {
       length,
       weight,
     } = order;
+
     const getOrderResponse: GetOrderResponse = {
       id: id,
       orderToken: orderToken,
@@ -110,18 +112,12 @@ orderRouter.put("/:orderToken", async (req: Request, res: Response) => {
       return;
     }
 
-    const woltFeeBody: WoltFee = {
-      pickup: {
-        location: {
-          formatted_address: updateOrder.seller?.address!,
-        },
-      },
-      dropoff: {
-        location: {
-          formatted_address: buyerInfo.address,
-        },
-      },
-    };
+    const woltFeeBody = createWoltFeePayload(buyerInfo, updateOrder);
+
+    if (!woltFeeBody) {
+      console.error("Wolt free body is undefined");
+      return;
+    }
 
     const woltFeeResponse = await getDeliveryFee(woltFeeBody);
 
@@ -151,48 +147,12 @@ orderRouter.post("/:orderToken", async (req: Request, res: Response) => {
       return;
     }
 
-    const woltDeliveryBody: WoltDeliveryOrder = {
-      pickup: {
-        location: {
-          formatted_address: order.seller?.address!,
-        },
-        comment: "The box is in front of the door",
-        contact_details: {
-          name: order.seller?.name!,
-          phone_number: order.seller?.mobile!,
-          send_tracking_link_sms: false,
-        },
-      },
-      dropoff: {
-        location: {
-          formatted_address: order.buyer?.address!,
-        },
-        contact_details: {
-          name: order.buyer?.name!,
-          phone_number: order.buyer?.mobile!,
-          send_tracking_link_sms: false,
-        },
-        comment: "Leave at the door, please",
-      },
-      customer_support: {
-        email: "string",
-        phone_number: "string",
-        url: "string",
-      },
-      merchant_order_reference_id: undefined,
-      is_no_contact: true,
-      contents: [
-        {
-          count: 1,
-          description: "plastic bag",
-          identifier: "12345",
-          tags: [],
-        },
-      ],
-      tips: [],
-      min_preparation_time_minutes: 10,
-      scheduled_dropoff_time: undefined,
-    };
+    const woltDeliveryBody = createWoltDeliveryPayload(order);
+
+    if (!woltDeliveryBody) {
+      console.error("Wolt free body is undefined");
+      return;
+    }
 
     const woltOrdersResponse = await getDeliveryOrders(woltDeliveryBody);
 

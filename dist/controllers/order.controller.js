@@ -42,6 +42,8 @@ const order_service_1 = require("../services/order.service");
 const cors_1 = __importDefault(require("cors"));
 const delivery_fee_1 = __importDefault(require("./delivery-fee"));
 const delivery_order_1 = __importDefault(require("./delivery-order"));
+const wolt_fee_1 = require("../utils/wolt-fee");
+const wolt_delivery_1 = require("../utils/wolt-delivery");
 exports.orderRouter = express_1.default.Router();
 exports.orderRouter.use(bodyParser.json());
 exports.orderRouter.use((0, cors_1.default)());
@@ -98,7 +100,6 @@ exports.orderRouter.post("/", (req, res) => __awaiter(void 0, void 0, void 0, fu
     }
 }));
 exports.orderRouter.put("/:orderToken", (req, res) => __awaiter(void 0, void 0, void 0, function* () {
-    var _a;
     const token = req.params.orderToken;
     try {
         const buyerInfo = req.body;
@@ -108,18 +109,11 @@ exports.orderRouter.put("/:orderToken", (req, res) => __awaiter(void 0, void 0, 
             console.error("Could not find order with such token");
             return;
         }
-        const woltFeeBody = {
-            pickup: {
-                location: {
-                    formatted_address: (_a = updateOrder.seller) === null || _a === void 0 ? void 0 : _a.address,
-                },
-            },
-            dropoff: {
-                location: {
-                    formatted_address: buyerInfo.address,
-                },
-            },
-        };
+        const woltFeeBody = (0, wolt_fee_1.createWoltFeePayload)(buyerInfo, updateOrder);
+        if (!woltFeeBody) {
+            console.error("Wolt free body is undefined");
+            return;
+        }
         const woltFeeResponse = yield (0, delivery_fee_1.default)(woltFeeBody);
         if (woltFeeResponse != "ERR_BAD_REQUEST") {
             updateOrder.buyer = buyerInfo;
@@ -135,7 +129,6 @@ exports.orderRouter.put("/:orderToken", (req, res) => __awaiter(void 0, void 0, 
     }
 }));
 exports.orderRouter.post("/:orderToken", (req, res) => __awaiter(void 0, void 0, void 0, function* () {
-    var _b, _c, _d, _e, _f, _g;
     const token = req.params.orderToken;
     try {
         const order = yield (0, order_service_1.getOrder)(token);
@@ -144,48 +137,11 @@ exports.orderRouter.post("/:orderToken", (req, res) => __awaiter(void 0, void 0,
             res.status(400).send("ERR_BAD_REQUEST");
             return;
         }
-        const woltDeliveryBody = {
-            pickup: {
-                location: {
-                    formatted_address: (_b = order.seller) === null || _b === void 0 ? void 0 : _b.address,
-                },
-                comment: "The box is in front of the door",
-                contact_details: {
-                    name: (_c = order.seller) === null || _c === void 0 ? void 0 : _c.name,
-                    phone_number: (_d = order.seller) === null || _d === void 0 ? void 0 : _d.mobile,
-                    send_tracking_link_sms: false,
-                },
-            },
-            dropoff: {
-                location: {
-                    formatted_address: (_e = order.buyer) === null || _e === void 0 ? void 0 : _e.address,
-                },
-                contact_details: {
-                    name: (_f = order.buyer) === null || _f === void 0 ? void 0 : _f.name,
-                    phone_number: (_g = order.buyer) === null || _g === void 0 ? void 0 : _g.mobile,
-                    send_tracking_link_sms: false,
-                },
-                comment: "Leave at the door, please",
-            },
-            customer_support: {
-                email: "string",
-                phone_number: "string",
-                url: "string",
-            },
-            merchant_order_reference_id: undefined,
-            is_no_contact: true,
-            contents: [
-                {
-                    count: 1,
-                    description: "plastic bag",
-                    identifier: "12345",
-                    tags: [],
-                },
-            ],
-            tips: [],
-            min_preparation_time_minutes: 10,
-            scheduled_dropoff_time: undefined,
-        };
+        const woltDeliveryBody = (0, wolt_delivery_1.createWoltDeliveryPayload)(order);
+        if (!woltDeliveryBody) {
+            console.error("Wolt free body is undefined");
+            return;
+        }
         const woltOrdersResponse = yield (0, delivery_order_1.default)(woltDeliveryBody);
         if (woltOrdersResponse != "ERR_BAD_REQUEST") {
             res.status(201).send(woltOrdersResponse);
