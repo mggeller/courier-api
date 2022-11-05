@@ -1,6 +1,11 @@
 # courier-api
 
-## Endpoints
+## **UI Repository and Application LINKs**
+**GitHub**: https://github.com/ArtHell/courier-ui
+
+**Application**: https://courier-ui.vercel.app/
+
+## **Endpoints**
 
 ### Customer Table
 
