@@ -39,8 +39,10 @@ exports.orderRouter = void 0;
 const express_1 = __importDefault(require("express"));
 const bodyParser = __importStar(require("body-parser"));
 const order_service_1 = require("../services/order.service");
+const cors_1 = __importDefault(require("cors"));
 exports.orderRouter = express_1.default.Router();
 exports.orderRouter.use(bodyParser.json());
+exports.orderRouter.use((0, cors_1.default)());
 exports.orderRouter.get("/", (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     try {
         const orders = yield (0, order_service_1.getAll)();

@@ -1,10 +1,12 @@
 import express, { Request, Response } from "express";
 import * as bodyParser from "body-parser";
 import { createOrder, getAll, getOrder, putOrder } from "../services/order.service";
+import cors from 'cors';
 
 export const orderRouter = express.Router();
 
 orderRouter.use(bodyParser.json());
+orderRouter.use(cors());
 
 orderRouter.get("/", async (req: Request, res: Response) => {
   try {
