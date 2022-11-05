@@ -66,7 +66,7 @@ exports.orderRouter.get("/:token", (req, res) => __awaiter(void 0, void 0, void 
             console.error("Could not find order with such token");
             return;
         }
-        return order;
+        res.status(200).send(order);
     }
     catch (error) {
         console.error(error);

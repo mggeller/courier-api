@@ -41,7 +41,7 @@ orderRouter.get("/:token", async (req: Request, res: Response) => {
       return;
     }
 
-    return order;
+    res.status(200).send(order);
   } catch (error) {
     console.error(error);
     res.status(400);
