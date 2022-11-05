@@ -9,11 +9,11 @@ const app: Express = express();
 const PORT = process.env.PORT;
 app.use(cors());
 
-app.use('/api/orders', orderRouter);
+app.use('/', orderRouter);
 
-app.get('/', (req: Request, res: Response) => {
+/* app.get('/', (req: Request, res: Response) => {
   res.send('Express + TypeScript Server');
-});
+}); */
 
 app.get('/delivery-orders', async (req: Request, res: Response) => {
   const result = await getDeliveryOrders();
