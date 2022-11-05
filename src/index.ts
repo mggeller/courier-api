@@ -15,12 +15,6 @@ app.get('/', (req: Request, res: Response) => {
   res.send('Express + TypeScript Server');
 });
 
-app.get('/delivery-orders', async (req: Request, res: Response) => {
-  const result = await getDeliveryOrders();
-
-  res.json(result);
-});
-
 app.listen(PORT, () => {
   console.log(`⚡️[server]: Server is running at https://localhost:${PORT}`);
 });

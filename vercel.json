@@ -12,10 +12,6 @@
       "dest": "dist/index.js"
     },
     {
-      "src": "/delivery-orders",
-      "dest": "dist/index.js"
-    },
-    {
       "src": "/orders",
       "dest": "dist/index.js"
     },
