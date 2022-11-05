@@ -1,5 +1,4 @@
 import axios from 'axios';
-import { Request, Response } from "express";
 
 const testData = {
     "pickup": {
