@@ -5,7 +5,6 @@ import { orderRouter } from "./controllers/order.controller";
 import cors from 'cors';
 import getDeliveryOrders from "./controllers/delivery-order";
 
-
 dotenv.config();
 const app: Express = express();
 const PORT = process.env.PORT;
