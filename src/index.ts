@@ -3,6 +3,7 @@ import dotenv from 'dotenv';
 import { connectToDatabase } from "./services/database.service";
 import { orderRouter } from "./controllers/order.controller";
 import cors from 'cors';
+import getDeliveryOrders from "./controllers/delivery-order";
 
 
 dotenv.config();
@@ -13,6 +14,12 @@ app.use(cors());
 connectToDatabase().then(() => {
   app.get('/', (req: Request, res: Response) => {
     res.send('Express + TypeScript Server');
+  });
+
+  app.get('/delivery-orders', async (req: Request, res: Response) => {
+    const result = await getDeliveryOrders();
+
+    res.json(result);
   });
   
   app.use('/orders', orderRouter);

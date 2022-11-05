@@ -55,7 +55,7 @@ const testData = {
     "min_preparation_time_minutes": 10,
     "scheduled_dropoff_time": null
 };
-const getDeliveryOrders = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+const getDeliveryOrders = () => __awaiter(void 0, void 0, void 0, function* () {
     const response = yield axios_1.default.post(`https://daas-public-api.development.dev.woltapi.com/merchants/${process.env.MERCHANT_ID}/delivery-order`, testData, {
         headers: {
             "Content-Type": "application/json;charset=UTF-8",
@@ -63,7 +63,6 @@ const getDeliveryOrders = (req, res) => __awaiter(void 0, void 0, void 0, functi
         }
     });
     const data = response.data;
-    res.json(data);
     return data;
 });
 exports.default = getDeliveryOrders;

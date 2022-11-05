@@ -44,7 +44,7 @@ const testData = {
     "scheduled_dropoff_time": null
 };
 
-const getDeliveryOrders = async (req: Request, res: Response) => {
+const getDeliveryOrders = async () => {
     const response = await axios.post(`https://daas-public-api.development.dev.woltapi.com/merchants/${process.env.MERCHANT_ID}/delivery-order`, testData, {
         headers: {
             "Content-Type": "application/json;charset=UTF-8",
@@ -53,7 +53,6 @@ const getDeliveryOrders = async (req: Request, res: Response) => {
     });
 
     const data = response.data;
-    res.json(data);
 
     return data;
 };
