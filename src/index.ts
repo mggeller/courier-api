@@ -2,10 +2,13 @@ import express, { Express, Request, Response } from "express";
 import dotenv from 'dotenv';
 import { connectToDatabase } from "./services/database.service";
 import { orderRouter } from "./controllers/order.controller";
+import cors from 'cors';
+
 
 dotenv.config();
 const app: Express = express();
 const PORT = process.env.PORT;
+app.use(cors());
 
 connectToDatabase().then(() => {
   app.get('/', (req: Request, res: Response) => {
