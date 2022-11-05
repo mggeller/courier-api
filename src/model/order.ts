@@ -14,5 +14,4 @@ interface Order {
     weight?: number;
 };
 
-
 export default Order;
