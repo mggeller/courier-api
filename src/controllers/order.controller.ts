@@ -54,9 +54,7 @@ orderRouter.post("/", async (req: Request, res: Response) => {
     const result = await createOrder(newOrder);
 
     result
-      ? res
-          .status(201)
-          .send(`Successfully created a new order with id ${result}`)
+      ? res.status(201).send(result)
       : res.status(500).send("Failed to creat new order");
   } catch (error) {
     console.error(error);

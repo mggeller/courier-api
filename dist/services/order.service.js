@@ -11,6 +11,7 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.putOrder = exports.createOrder = exports.getOrder = exports.getAll = void 0;
 const database_service_1 = require("./database.service");
+const uuid_1 = require("uuid");
 const getAll = () => __awaiter(void 0, void 0, void 0, function* () {
     var _a;
     let orders;
@@ -45,8 +46,15 @@ const createOrder = (order) => __awaiter(void 0, void 0, void 0, function* () {
     let result;
     try {
         yield (0, database_service_1.connectToDatabase)();
+        const token = (0, uuid_1.v4)();
+        console.log("TOKEN ON CREATE: ", token);
+        order.orderToken = token;
+        console.log("ORDER TO CREATE: ", order);
         result = yield ((_c = database_service_1.collections.orders) === null || _c === void 0 ? void 0 : _c.insertOne(order));
-        return result === null || result === void 0 ? void 0 : result.insertedId;
+        const response = {
+            token: token,
+        };
+        return response;
     }
     catch (error) {
         console.error("Database connection failed", error);

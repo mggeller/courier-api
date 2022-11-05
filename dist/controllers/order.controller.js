@@ -78,9 +78,7 @@ exports.orderRouter.post("/", (req, res) => __awaiter(void 0, void 0, void 0, fu
         const newOrder = req.body;
         const result = yield (0, order_service_1.createOrder)(newOrder);
         result
-            ? res
-                .status(201)
-                .send(`Successfully created a new order with id ${result}`)
+            ? res.status(201).send(result)
             : res.status(500).send("Failed to creat new order");
     }
     catch (error) {

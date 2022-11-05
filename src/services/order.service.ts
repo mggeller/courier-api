@@ -1,5 +1,11 @@
 import { collections, connectToDatabase } from "./database.service";
 import Order from "../model/order";
+import {} from "module";
+import { v4 as uuidv4 } from "uuid";
+
+type PostResponse = {
+  token: string;
+};
 
 export const getAll = async () => {
   let orders;
@@ -31,9 +37,17 @@ export const createOrder = async (order: Order) => {
   let result;
   try {
     await connectToDatabase();
+    const token = uuidv4();
+    console.log("TOKEN ON CREATE: ", token);
+    order.orderToken = token;
+    console.log("ORDER TO CREATE: ", order);
     result = await collections.orders?.insertOne(order);
 
-    return result?.insertedId;
+    const response: PostResponse = {
+      token: token,
+    };
+
+    return response;
   } catch (error) {
     console.error("Database connection failed", error);
     process.exit();
