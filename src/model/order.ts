@@ -12,6 +12,7 @@ interface Order {
     width?: number;
     length?: number;
     weight?: number;
+    trackingLink?: string;
 };
 
 

@@ -22,6 +22,7 @@ type GetOrderResponse = {
   width?: number;
   length?: number;
   weight?: number;
+  trackingLink?: string;
 };
 
 export const orderRouter = express.Router();
@@ -64,6 +65,7 @@ orderRouter.get("/:orderToken", async (req: Request, res: Response) => {
       width,
       length,
       weight,
+      trackingLink,
     } = order;
 
     const getOrderResponse: GetOrderResponse = {
@@ -75,6 +77,7 @@ orderRouter.get("/:orderToken", async (req: Request, res: Response) => {
       width: width,
       length: length,
       weight: weight,
+      trackingLink: trackingLink,
     };
 
     res.status(200).send(getOrderResponse);
@@ -157,6 +160,8 @@ orderRouter.post("/:orderToken", async (req: Request, res: Response) => {
     const woltOrdersResponse = await getDeliveryOrders(woltDeliveryBody);
 
     if (woltOrdersResponse != "ERR_BAD_REQUEST") {
+      order.trackingLink = woltOrdersResponse.tracking.url;
+      await putOrder(order, token);
       res.status(201).send(woltOrdersResponse);
       return;
     }

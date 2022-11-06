@@ -68,7 +68,7 @@ exports.orderRouter.get("/:orderToken", (req, res) => __awaiter(void 0, void 0, 
             console.error("Could not find order with such token");
             return;
         }
-        const { id, orderToken, accountNumber, price, height, width, length, weight, } = order;
+        const { id, orderToken, accountNumber, price, height, width, length, weight, trackingLink, } = order;
         const getOrderResponse = {
             id: id,
             orderToken: orderToken,
@@ -78,6 +78,7 @@ exports.orderRouter.get("/:orderToken", (req, res) => __awaiter(void 0, void 0, 
             width: width,
             length: length,
             weight: weight,
+            trackingLink: trackingLink,
         };
         res.status(200).send(getOrderResponse);
     }
@@ -144,6 +145,8 @@ exports.orderRouter.post("/:orderToken", (req, res) => __awaiter(void 0, void 0,
         }
         const woltOrdersResponse = yield (0, delivery_order_1.default)(woltDeliveryBody);
         if (woltOrdersResponse != "ERR_BAD_REQUEST") {
+            order.trackingLink = woltOrdersResponse.tracking.url;
+            yield (0, order_service_1.putOrder)(order, token);
             res.status(201).send(woltOrdersResponse);
             return;
         }
