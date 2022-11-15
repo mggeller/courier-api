@@ -1,6 +1,9 @@
 # courier-api
 
-## **UI Repository and Application LINKs**
+### **ThisProject was created during Junction 2022 hackathon** 
+
+## **UI Repository and Application LINKs**   
+
 **GitHub**: https://github.com/ArtHell/courier-ui
 
 **Application**: https://courier-ui.vercel.app/
